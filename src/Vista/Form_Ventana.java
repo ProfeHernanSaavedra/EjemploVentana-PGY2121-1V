@@ -5,6 +5,10 @@
  */
 package Vista;
 
+import Controlador.Operaciones;
+import Modelo.Numero;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author USRVI-LC2
@@ -32,6 +36,7 @@ public class Form_Ventana extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jtxt_num1 = new javax.swing.JTextField();
         jtxt_num2 = new javax.swing.JTextField();
+        jcb_operaciones = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
         jbtn_sumar = new javax.swing.JButton();
         jbtn_limpiar = new javax.swing.JButton();
@@ -56,19 +61,23 @@ public class Form_Ventana extends javax.swing.JFrame {
             }
         });
 
+        jcb_operaciones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-Operaciones-", "Sumar", "Restar", "Multiplicar", "Dividir" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(50, 50, 50)
-                .addComponent(jLabel3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jtxt_num1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jtxt_num2, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jtxt_num1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(jtxt_num2))
+                .addGap(58, 58, 58)
+                .addComponent(jcb_operaciones, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -77,17 +86,20 @@ public class Form_Ventana extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4)
                     .addComponent(jtxt_num1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jcb_operaciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtxt_num2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jPanel2.setBackground(new java.awt.Color(255, 204, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Opciones"));
 
-        jbtn_sumar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/dibujar-sumando-cruz.png"))); // NOI18N
-        jbtn_sumar.setText("Sumar");
+        jbtn_sumar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/calcular.png"))); // NOI18N
+        jbtn_sumar.setText("Calcular");
         jbtn_sumar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtn_sumarActionPerformed(evt);
@@ -189,29 +201,69 @@ public class Form_Ventana extends javax.swing.JFrame {
     }//GEN-LAST:event_jtxt_num2ActionPerformed
 
     private void jbtn_sumarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_sumarActionPerformed
-       
+
         //extraer los datos de los textos 
-        int num1 = Integer.parseInt(this.jtxt_num1.getText());
-        int num2 = Integer.parseInt(this.jtxt_num2.getText());
-        
-        int suma = num1 + num2;
-        String sumaStr = String.valueOf(suma);
-        
-        this.jlbl_resultado.setText(sumaStr);
-        
-        
+        int num1 = 0;
+        int num2 = 0;
+        try {
+            num1 = Integer.parseInt(this.jtxt_num1.getText());
+            num2 = Integer.parseInt(this.jtxt_num2.getText());
+        } catch (NumberFormatException e) {
+
+            JOptionPane.showMessageDialog(null, "Datos no válidos", "Validación", 0);
+        }
+
+        Operaciones op = new Operaciones();
+        Numero num = new Numero(num1, num2);
+
+//        if (this.jcb_operaciones.getSelectedIndex() == 1) {
+//            int suma = op.sumar(num);
+//            //        int suma = num1 + num2;
+//            String sumaStr = String.valueOf(suma);
+//            this.jlbl_resultado.setText(sumaStr);
+//        }
+//        else{
+//            if (this.jcb_operaciones.getSelectedIndex() == 2){
+//                int resta = op.restar(num);
+//                String restaStr = String.valueOf(resta);
+//                this.jlbl_resultado.setText(sumaStr);
+//            }
+//        }
+        switch (this.jcb_operaciones.getSelectedIndex()) {
+            case 1:
+                int suma = op.sumar(num);
+                String sumaStr = String.valueOf(suma);
+                this.jlbl_resultado.setText(sumaStr);
+                break;
+            case 2:
+                int resta = op.restar(num);
+                String restaStr = String.valueOf(resta);
+                this.jlbl_resultado.setText(restaStr);
+                break;   
+            case 3:
+                int multi = op.multiplicar(num);
+                String multiStr = String.valueOf(multi);
+                this.jlbl_resultado.setText(multiStr);
+                break;
+            case 4:
+                double div = op.dividir(num);
+                String divStr = String.valueOf(div);
+                this.jlbl_resultado.setText(divStr);
+                break;      
+           
+        }
+
     }//GEN-LAST:event_jbtn_sumarActionPerformed
 
     private void jbtn_limpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtn_limpiarActionPerformed
-        
-        
+
         this.jtxt_num1.setText("");
         this.jtxt_num2.setText("");
         this.jlbl_resultado.setText("");
-        
+        this.jcb_operaciones.setSelectedIndex(0);
         this.jtxt_num1.requestFocus();
-        
-        
+
+
     }//GEN-LAST:event_jbtn_limpiarActionPerformed
 
     /**
@@ -259,6 +311,7 @@ public class Form_Ventana extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JButton jbtn_limpiar;
     private javax.swing.JButton jbtn_sumar;
+    private javax.swing.JComboBox<String> jcb_operaciones;
     private javax.swing.JLabel jlbl_resultado;
     private javax.swing.JTextField jtxt_num1;
     private javax.swing.JTextField jtxt_num2;
